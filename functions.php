@@ -19,6 +19,14 @@ function hashgenerate($content){
 	return $hash;
 }
 
+function make_timestamp($code=""){
+	if ($code==""){
+		return date('YmdHis');
+	}else{
+		return date('YmdHis',time()+intval($code));
+	}
+}
+
 function makesafe($d){
   $d = str_replace("\t","",$d);
   $d = str_replace("\n"," ",$d);
