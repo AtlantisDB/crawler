@@ -1,8 +1,8 @@
 <?php
 
-import("functions.php");
-import("startup.php");
-import("sqdb.php");
+include("functions.php");
+include("startup.php");
+include("sqdb.php");
 
 log_clear();
 log_write("Startup Test!");
