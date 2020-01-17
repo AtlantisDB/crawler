@@ -4,7 +4,7 @@
 
 $sqdbsettings=array();
 
-$import = file_get_contents("mysql.json");
+$import = file_get_contents("/var/master/mysql.json");
 $json_a = json_decode($import, true);
 if ($json_a === null) {
   die("Unable to decode and load data");
