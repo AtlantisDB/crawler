@@ -8,4 +8,7 @@ log_clear("links");
 log_write("Startup Test!","links");
 
 
+log_write("Loading links to check...","links");
+
+
 ?>
