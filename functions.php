@@ -1,5 +1,14 @@
 <?php
 
+function log_write($data){
+	error_log("\n$data", 3, "/var/master/output.txt");
+}
+
+function log_clear(){
+	$fh = fopen('/var/master/output.txt', 'w');
+	fclose($fh);
+}
+
 function keygenerate($content){
 	$hash=md5($content);
 	return $hash[0];
