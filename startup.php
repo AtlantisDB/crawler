@@ -3,8 +3,8 @@ echo ++$argv[1];
 $_ = $_SERVER['_'];
 
 register_shutdown_function(function () {
-    global $_, $argv;
-    pcntl_exec($_, $argv);
+  #global $_, $argv;
+  #pcntl_exec($_, $argv);
 });
 
 //Import settings and begin connect to mysql tables for the system
