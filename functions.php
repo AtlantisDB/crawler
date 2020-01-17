@@ -1,11 +1,11 @@
 <?php
 
-function log_write($data){
-	error_log("\n$data", 3, "/var/master/output.txt");
+function log_write($data,$file){
+	error_log("\n$data", 3, "/var/master/output_".$file.".txt");
 }
 
-function log_clear(){
-	$fh = fopen('/var/master/output.txt', 'w');
+function log_clear($file){
+	$fh = fopen('/var/master/output_'.$file.'.txt', 'w');
 	fclose($fh);
 }
 
