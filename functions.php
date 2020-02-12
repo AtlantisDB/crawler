@@ -319,6 +319,8 @@ function check_noindex($url){
   if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/posts/") !== false){ $returns=true; }}
 	if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/places/") !== false){ $returns=true; }}
   if (strpos($url, "reddit.com") !== false){ if (strpos($url, "\/comments/") !== false){ $returns=true; }}
+	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/users/") !== false){ $returns=true; }}
+	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/jobs/") !== false){ $returns=true; }}
 
   return $returns;
 }
