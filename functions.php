@@ -119,6 +119,93 @@ function endswith($FullStr, $needle){
 }
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Get site common phrases
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+function content_get_phrases($html){
+  $meta=content_get_metadata($html);
+  $content = html2txt($html);
+  $content = str_replace("'","",$content);
+  $content = str_replace("\"","",$content);
+  $content=strtolower("".$meta["title"]." - ".$meta["description"]." - ".$content."");
+
+  $match_all=content_get_phrases_content($content);
+  $match_title=content_get_phrases_content($meta["title"]);
+  $match_description=content_get_phrases_content($meta["description"]);
+
+  $phraseview=array();
+  $phrasesaved=array();
+
+  $exploded = multiexplode(array(",",".","|",":","!","?","-","(",")"),$content);
+  foreach ($exploded as $key => $value){
+    $value = " ".$value." ";
+    $value = preg_replace("/\b\w{1,2}\b/u", '', $value);
+    $value = str_replace("  "," ",$value);
+    $value = str_replace("  "," ",$value);
+    $value = preg_replace("/[^a-zA-Z 0-9]+/", "", $value);
+    $value = trim($value);
+    $save=true;
+    if (!strpos($value, " ") !== false){
+      $save=false;
+    }
+    if (!strlen($value)>=10){
+      $save=false;
+    }
+
+    if ($save==true){
+      $parsekey=md5($value);
+      if (!isset($phrasesaved[$parsekey])){
+        $phrasesaved[$parsekey]=true;
+        $countfound=0;
+        $countfound=$countfound+substr_count($match_all, $value);
+        $countfound=$countfound+(substr_count($match_title, $value)*80);
+        $countfound=$countfound+(substr_count($match_description, $value)*20);
+        array_push($phraseview,$value);
+        if ($countfound>=2){
+          for ($k = 0 ; $k < $countfound; $k++){
+            array_push($phraseview,$value);
+          }
+        }
+      }
+    }else{
+      unset($exploded[$key]);
+    }
+  }
+
+  //Get top results
+  $returnarray=array();
+  $phrases=array_count_values($phraseview);
+  arsort($phrases);
+  $limit=0;
+  foreach ($phrases as $key => $value){
+    if ($limit<=2){
+      if ($value>=5){
+        if (strpos($key, " ") !== false){
+          if (strlen($key)>=10){
+            //sitelog("logic","Found phrase ".$key." with ".$value." matches");
+            array_push($returnarray,$key);
+          }
+        }
+      }
+    }
+  }
+
+  return $returnarray;
+
+}
+
+function content_get_phrases_content($contentmatch){
+  $contentmatch = strtolower($contentmatch);
+  $contentmatch = str_replace(" the ","",$contentmatch);
+  $contentmatch = str_replace(" and ","",$contentmatch);
+  $contentmatch = preg_replace("/\b\w{1,2}\b/u", '', $contentmatch);
+  $contentmatch = preg_replace("/[^a-zA-Z 0-9]+/", "", $contentmatch);
+  $contentmatch = str_replace("  "," ",$contentmatch);
+  $contentmatch = str_replace("  "," ",$contentmatch);
+  return $contentmatch;
+}
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Check if valid domain
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
