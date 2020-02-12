@@ -311,16 +311,16 @@ function check_virus($content){
 function check_noindex($url){
   $returns=false;
 
-  if (strpos($url, "twitter.com") !== false){ if (strpos($url, "\/status/") !== false){ $returns=true; }}
+  if (strpos($url, "twitter.com") !== false){ if (strpos($url, "\/status") !== false){ $returns=true; }}
   if (strpos($url, "m.twitter.com") !== false){ $returns=true; }
   if (strpos($url, "?") !== false){ $returns=true; }
   if (strpos($url, "facebook.com/photo.php") !== false){ $returns=true; }
   if (strpos($url, "m.facebook.com") !== false){ $returns=true; }
-  if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/posts/") !== false){ $returns=true; }}
-	if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/places/") !== false){ $returns=true; }}
-  if (strpos($url, "reddit.com") !== false){ if (strpos($url, "\/comments/") !== false){ $returns=true; }}
-	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/users/") !== false){ $returns=true; }}
-	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/jobs/") !== false){ $returns=true; }}
+  if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/posts") !== false){ $returns=true; }}
+	if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/places") !== false){ $returns=true; }}
+  if (strpos($url, "reddit.com") !== false){ if (strpos($url, "\/comments") !== false){ $returns=true; }}
+	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/users") !== false){ $returns=true; }}
+	if (strpos($url, "stackoverflow.com") !== false){ if (strpos($url, "\/jobs") !== false){ $returns=true; }}
 
   return $returns;
 }
