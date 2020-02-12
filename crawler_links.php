@@ -145,6 +145,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 			    	$link=str_replace("http://www.","http://",$link);
 						$link=str_replace("https://","",$link);
 						$link=str_replace("http://","",$link);
+            if (substr($link, 0, 2) === '//'){ $link="http:".$link.""; }
             if (substr($link, 0, 1) === '/'){ $host=strtok($webpage_url, '/'); $link="".$host."".$link.""; }
 						$link=trim($link,'/');
 						$link=strtolower($link);
