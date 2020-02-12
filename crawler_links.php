@@ -93,14 +93,8 @@ if (sqdb_num_rows($querye,"index") > 0){
 			if ($temp_title_len>=30){ $webpage_score+=8; }
 			if ($temp_title_len>=70){ $webpage_score-=5; }
 			if ($temp_title_len>=80){ $webpage_score-=5; }
-			if ($temp_title_len>=90){ $webpage_score-=5; }
-			if ($temp_title_len>=100){ $webpage_score-=5; }
 			if ($temp_description_len <= 100){ $webpage_score-=5; }
 			if ($temp_description_len <= 80){ $webpage_score-=5; }
-			if ($temp_description_len <= 70){ $webpage_score-=10; }
-			if ($temp_description_len <= 50){ $webpage_score-=10; }
-			if ($temp_description_len <= 40){ $webpage_score-=15; }
-			if ($temp_description_len <= 30){ $webpage_score-=15; }
 
 			//$webpage_linkinscore=round((check_webpage_links_weight($webpage_url))/40);
 			////sitelog("score","After all main checks the score is now ".$webpage_score." with ".$webpage_linkinscore." external links for the site");
