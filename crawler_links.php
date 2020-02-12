@@ -162,9 +162,9 @@ if (sqdb_num_rows($querye,"index") > 0){
 							//Add New URL to DB
 							if ($priority>0){
 								$newlinksfound[$linkkey]=true;
-								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE url='$link' LIMIT 1","index");
+								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE content='$link' LIMIT 1","index");
 								if (!sqdb_num_rows($queryt,"index") > 0){
-									$result = sqdb_query("INSERT INTO crawl_check(url) VALUES('$link')","index");
+									$result = sqdb_query("INSERT INTO crawl_check(content) VALUES('$link')","index");
                   log_write("Found new url to index ".$link."","links");
 								}else{
                   log_write("We already have url in system to scan ".$link."","links");
