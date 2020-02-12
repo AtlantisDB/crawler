@@ -19,6 +19,8 @@ if (sqdb_num_rows($querye) > 0){
 		$webpage_https=false;
 		$webpage_db_new=true;
 
+    log_write("Starting process on url ".$scanurl."","links");
+
     $ch = curl_init($scanurl);
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 (compatible; AtlantisDB SpiderBot/1.2 Instance)');
@@ -33,8 +35,6 @@ if (sqdb_num_rows($querye) > 0){
     $webpage_html = curl_exec($ch);
     $webpage_header=curl_getinfo($ch);
     curl_close($ch);
-
-    log_write("Starting process on url ".$scanurl."","links");
 
     $webpage_size_bytes=strlen($webpage_html);
     $webpage_url=$webpage_header["url"];
@@ -175,6 +175,8 @@ if (sqdb_num_rows($querye) > 0){
       log_write("Failed basic checks and cant start main scan","links");
 		}
   }
+}else{
+  log_write("No links found to check","links");
 }
 
 ?>
