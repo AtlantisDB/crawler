@@ -240,8 +240,8 @@ function get_webpage_id($url){
   $hash=hashgenerate($url);
 
   $query=sqdb_query("SELECT id FROM webpages_info_urlhashes_".$key." WHERE content='".$hash."' LIMIT 1","save");
-  if (sqdb_num_rows($query) > 0){
-    while ($row=sqdb_fetch_array($query)){
+  if (sqdb_num_rows($query,"save") > 0){
+    while ($row=sqdb_fetch_array($query,"save")){
       $returns=$row["id"];
     }
   }
@@ -259,7 +259,7 @@ function check_webpage_indexed($url){
   $hash=hashgenerate($url);
 
   $query=sqdb_query("SELECT * FROM webpages_info_urlhashes_".$key." WHERE content='".$hash."' LIMIT 1","save");
-  if (sqdb_num_rows($query) > 0){
+  if (sqdb_num_rows($query,"save") > 0){
     $returns=true;
   }
 
