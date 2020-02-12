@@ -152,6 +152,7 @@ if (sqdb_num_rows($querye,"index") > 0){
             if (strpos($link, './') !== false){ $priority=$priority-999; }
             if ($link=="#"){ $priority=$priority-999; }
             if ($link==""){ $priority=$priority-999; }
+            if (substr($link, 0, 1) === '#'){ $priority=$priority-999; }
 						if (check_noindex($link)==true){ $priority=$priority-999; }
 						if (check_webpage_indexed($link)==true){ $priority=$priority-999; }
 						if (check_valid_domain($link)==true){ $priority=$priority-999; }
