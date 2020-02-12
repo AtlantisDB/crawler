@@ -11,7 +11,7 @@ log_write("Loading links to check...","links");
 
 $querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 1","index");
 if (sqdb_num_rows($querye,"index") > 0){
-  while ($row=sqdb_fetch_array($querye, "index")){
+  while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
     $scanurl = $row['content'];
 		if (strpos($scanurl, "http") === false){ $scanurl="http://".$scanurl.""; }
