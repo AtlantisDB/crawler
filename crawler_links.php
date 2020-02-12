@@ -9,7 +9,7 @@ log_write("Startup Test @ ".make_timestamp()."!","links");
 
 log_write("Loading links to check...","links");
 
-$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 5","index");
+$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 3","index");
 if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
@@ -134,55 +134,59 @@ function process_urls($id,$scanurl){
       }
 
       //Scan for new links to add to crawler
+      $newlinks_max=$webpage_score;
       $newlinksfound=array();
       if (preg_match_all('/href=["\']([^\'"]*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
         foreach ($links as $value){
-          $priority=10;
-          $link=$value[1];
-          $link=makesafe($link);
-          $urlcon=strlen($link);
-          if ($webpage_url==$link){ $priority=$priority-999; }
-          if (substr($link, 0, 2) === '//'){ $link="http:".$link.""; }
-          if (substr($link, 0, 1) === '/'){ $host=strtok($webpage_url, '/'); $link="".$host."".$link.""; }
-          $link=trim($link,'/');
-          $link=strtolower($link);
-          $link=str_replace("https://www.","https://",$link);
-          $link=str_replace("http://www.","http://",$link);
-          $link=str_replace("https://","",$link);
-          $link=str_replace("http://","",$link);
-          if (strpos($link, '.jpg') !== false){ $priority=$priority-999; }
-          if (strpos($link, '.png') !== false){ $priority=$priority-999; }
-          if (strpos($link, '.svg') !== false){ $priority=$priority-999; }
-          if (strpos($link, '.jpeg') !== false){ $priority=$priority-999; }
-          if (strpos($link, '.js') !== false){ $priority=$priority-999; }
-          if (strpos($link, '.css') !== false){ $priority=$priority-999; }
-          if (strpos($link, './') !== false){ $priority=$priority-999; }
-          if ($link=="#"){ $priority=$priority-999; }
-          if ($link==""){ $priority=$priority-999; }
-          if (substr($link, 0, 1) === '#'){ $priority=$priority-999; }
-          if (check_noindex($link)==true){ $priority=$priority-999; }
-          if (check_webpage_indexed($link)==true){ $priority=$priority-999; }
-          if (check_valid_domain($link)==true){ $priority=$priority-999; }
-          if (strpos($webpage_meta["robots"], "nofollow") !== false){ $priority=$priority-999; }
-          if (strpos($webpage_meta["heyanna-robots"], "nofollow") !== false){$priority=$priority-999; }
-          $linkhash=sha1($link);
+          if ($newlinks_max>=1){
+            $newlinks_max=$newlinks_max-1;
+            $priority=10;
+            $link=$value[1];
+            $link=makesafe($link);
+            $urlcon=strlen($link);
+            if ($webpage_url==$link){ $priority=$priority-999; }
+            if (substr($link, 0, 2) === '//'){ $link="http:".$link.""; }
+            if (substr($link, 0, 1) === '/'){ $host=strtok($webpage_url, '/'); $link="".$host."".$link.""; }
+            $link=trim($link,'/');
+            $link=strtolower($link);
+            $link=str_replace("https://www.","https://",$link);
+            $link=str_replace("http://www.","http://",$link);
+            $link=str_replace("https://","",$link);
+            $link=str_replace("http://","",$link);
+            if (strpos($link, '.jpg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.png') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.svg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.jpeg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.js') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.css') !== false){ $priority=$priority-999; }
+            if (strpos($link, './') !== false){ $priority=$priority-999; }
+            if ($link=="#"){ $priority=$priority-999; }
+            if ($link==""){ $priority=$priority-999; }
+            if (substr($link, 0, 1) === '#'){ $priority=$priority-999; }
+            if (check_noindex($link)==true){ $priority=$priority-999; }
+            if (check_webpage_indexed($link)==true){ $priority=$priority-999; }
+            if (check_valid_domain($link)==true){ $priority=$priority-999; }
+            if (strpos($webpage_meta["robots"], "nofollow") !== false){ $priority=$priority-999; }
+            if (strpos($webpage_meta["heyanna-robots"], "nofollow") !== false){$priority=$priority-999; }
+            $linkhash=sha1($link);
 
-          //Fixing and Prority Check
-          if (!isset($newlinksfound[$linkhash])){
-            if ($urlcon >= 20){ $priority=$priority-1; }
-            if ($urlcon >= 50){ $priority=$priority-2; }
-            if ($urlcon >= 80){ $priority=$priority-2; }
-            if ($urlcon >= 110){ $priority=$priority-3; }
+            //Fixing and Prority Check
+            if (!isset($newlinksfound[$linkhash])){
+              if ($urlcon >= 20){ $priority=$priority-1; }
+              if ($urlcon >= 50){ $priority=$priority-2; }
+              if ($urlcon >= 80){ $priority=$priority-2; }
+              if ($urlcon >= 110){ $priority=$priority-3; }
 
-            //Add New URL to DB
-            if ($priority>0){
-              $newlinksfound[$linkhash]=true;
-              $queryt=sqdb_query("SELECT * FROM crawl_check WHERE linkhash='$linkhash' LIMIT 1","index");
-              if (!sqdb_num_rows($queryt,"index") > 0){
-                $result = sqdb_query("INSERT INTO crawl_check(linkhash,content) VALUES('$linkhash','$link')","index");
-                log_write("Added URL: ".$link."","links");
-              }else{
-                //log_write("URL is BAD we are not adding to the index list ".$link."","links");
+              //Add New URL to DB
+              if ($priority>0){
+                $newlinksfound[$linkhash]=true;
+                $queryt=sqdb_query("SELECT * FROM crawl_check WHERE linkhash='$linkhash' LIMIT 1","index");
+                if (!sqdb_num_rows($queryt,"index") > 0){
+                  $result = sqdb_query("INSERT INTO crawl_check(linkhash,content) VALUES('$linkhash','$link')","index");
+                  log_write("Added URL: ".$link."","links");
+                }else{
+                  //log_write("URL is BAD we are not adding to the index list ".$link."","links");
+                }
               }
             }
           }
