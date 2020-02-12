@@ -27,6 +27,13 @@ function make_timestamp($code=""){
 	}
 }
 
+function codegenerate($length=8){
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$rs="";
+	for ($i = 0; $i < $length; $i++){ $rs .= $characters[rand(0, strlen($characters) - 1)]; }
+	return $rs;
+}
+
 function makesafe($d){
   $d = str_replace("\t","",$d);
   $d = str_replace("\n"," ",$d);
