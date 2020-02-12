@@ -23,7 +23,6 @@ if (sqdb_num_rows($querye,"index") > 0){
     log_write("","links");
     log_write("","links");
     log_write("-----------------------------------------------------------------","links");
-    log_write("Starting process on url ".$scanurl."","links");
 
     $ch = curl_init($scanurl);
     curl_setopt($ch, CURLOPT_HEADER, false);
@@ -64,13 +63,11 @@ if (sqdb_num_rows($querye,"index") > 0){
 		$webpage_url_hash=hashgenerate($webpage_url);
 		$webpage_adult=check_adult($webpage_html);
 
-    log_write("Starting scan on webpage with the URL ".$webpage_url." with byte size of ".$webpage_size_bytes." and key ".$webpage_key." hash ".$webpage_url_hash."","links");
+    log_write("Starting scan on URL ".$webpage_url." with byte size of ".$webpage_size_bytes."","links");
 
 		//Check if we can keep running
 		if ($webpage_score>=1){
       log_write("Passed basic checks, starting advanced scanning","links");
-			//sitelog("good","Passed basic checks, starting advanced scanning");
-			//sitelog("info","Adult content check gave us ".$webpage_adult."");
 
 			//Check basic contents
 			$webpage_meta=content_get_metadata($webpage_html);
@@ -104,8 +101,6 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 			//$webpage_linkinscore=round((check_webpage_links_weight($webpage_url))/40);
 			////sitelog("score","After all main checks the score is now ".$webpage_score." with ".$webpage_linkinscore." external links for the site");
-      log_write("","links");
-      log_write("","links");
       log_write($webpage_meta["title"],"links");
       log_write($webpage_meta["description"],"links");
       log_write("After all main checks the score is now ".$webpage_score."","links");
@@ -142,7 +137,6 @@ if (sqdb_num_rows($querye,"index") > 0){
 						$link=$value[1];
 						$link=makesafe($link);
 						$urlcon=strlen($link);
-            log_write("Found new url to index ".$link."","links");
 						if ($webpage_url==$link){ $priority=$priority-999; }
 						$link=str_replace("https://www.","https://",$link);
 			    	$link=str_replace("http://www.","http://",$link);
@@ -170,9 +164,9 @@ if (sqdb_num_rows($querye,"index") > 0){
 								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE linkhash='$linkhash' LIMIT 1","index");
 								if (!sqdb_num_rows($queryt,"index") > 0){
 									$result = sqdb_query("INSERT INTO crawl_check(linkhash,content) VALUES('$linkhash','$link')","index");
-                  log_write("URL is good we are adding to the index list ".$link."","links");
+                  log_write("Added URL: ".$link."","links");
 								}else{
-                  log_write("URL is BAD we are not adding to the index list ".$link."","links");
+                  //log_write("URL is BAD we are not adding to the index list ".$link."","links");
 								}
 							}
 						}
