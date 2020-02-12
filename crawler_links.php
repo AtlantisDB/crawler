@@ -9,7 +9,7 @@ log_write("Startup Test @ ".make_timestamp()."!","links");
 
 log_write("Loading links to check...","links");
 
-$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 5","index");
+$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 2","index");
 if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
@@ -17,7 +17,7 @@ if (sqdb_num_rows($querye,"index") > 0){
     $qdelete=sqdb_query("DELETE FROM crawl_check WHERE id='$id'","index");
 		if (strpos($scanurl, "http") === false){ $scanurl="http://".$scanurl.""; }
     if (strpos($scanurl, "?") !== false){ $scanurl=substr($scanurl, 0, strpos($scanurl, "?")); }
-    
+
 		$webpage_score=5;
 		$webpage_https=false;
 		$webpage_db_new=true;
@@ -134,7 +134,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 				//Scan for new links to add to crawler
 				$newlinksfound=array();
-				if (preg_match_all('/href=["\']https\:\/\/([a-zA-Z0-9\-\_\?\&\#]\S*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
+				if (preg_match_all('/href=["\']([a-zA-Z0-9\-\_\?\&\#]\S*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
 					foreach ($links as $value){
 						$priority=10;
 						$link=$value[1];
@@ -145,6 +145,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 			    	$link=str_replace("http://www.","http://",$link);
 						$link=str_replace("https://","",$link);
 						$link=str_replace("http://","",$link);
+            if (substr($link, 0, 1) === '/'){ $host=strtok($webpage_url, '/'); $link="".$host."".$link.""; } 
 						$link=trim($link,'/');
 						$link=strtolower($link);
 						if (check_noindex($link)==true){ $priority=$priority-999; }
