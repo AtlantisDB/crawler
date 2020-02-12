@@ -13,7 +13,7 @@ $querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 1","index");
 if (sqdb_num_rows($querye) > 0){
   while ($row=sqdb_fetch_array($querye)){
     $id = $row['id'];
-    $scanurl = $row['url'];
+    $scanurl = $row['content'];
 		if (strpos($scanurl, "http") === false){ $scanurl="http://".$scanurl.""; }
 		$webpage_score=5;
 		$webpage_https=false;
