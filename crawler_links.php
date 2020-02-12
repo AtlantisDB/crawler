@@ -100,8 +100,11 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 			//$webpage_linkinscore=round((check_webpage_links_weight($webpage_url))/40);
 			////sitelog("score","After all main checks the score is now ".$webpage_score." with ".$webpage_linkinscore." external links for the site");
+      log_write("-","links");
+      log_write("-","links");
+      log_write($webpage_meta["title"],"links");
+      log_write($webpage_meta["description"],"links");
       log_write("After all main checks the score is now ".$webpage_score."","links");
-			$webpage_score=$webpage_score+$webpage_linkinscore;
 
       //Common phrases in the page for simple index search
 			$phrases=content_get_phrases($webpage_html);
