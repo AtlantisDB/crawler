@@ -14,6 +14,7 @@ if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
     $scanurl = $row['content'];
+    $qdelete=sqdb_query("DELETE FROM crawl_check WHERE id='$id'","index");
 		if (strpos($scanurl, "http") === false){ $scanurl="http://".$scanurl.""; }
 		$webpage_score=5;
 		$webpage_https=false;
@@ -121,14 +122,14 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 				//Saving NEW
 				if ($webpage_db_new==true){
-          $querye=sqdb_query("INSERT INTO crawl_save(content) VALUES('$webpage_url')","index");
+          $linkhash=sha1($link);
+          $querye=sqdb_query("INSERT INTO crawl_save(linkhash,content) VALUES('$linkhash','$webpage_url')","index");
           log_write("Added webpage to save list","links");
 				}
 				//Saving UPDATE
 				if ($webpage_db_new==false){
           //We dont need to save, we have it indexed it will get updated later!
 				}
-
 
 				//Scan for new links to add to crawler
 				$newlinksfound=array();
@@ -151,10 +152,10 @@ if (sqdb_num_rows($querye,"index") > 0){
 						if (check_valid_domain($link)==true){ $priority=$priority-999; }
 						if (strpos($webpage_meta["robots"], "nofollow") !== false){ $priority=$priority-999; }
 						if (strpos($webpage_meta["heyanna-robots"], "nofollow") !== false){$priority=$priority-999; }
-						$linkkey=md5($link);
+            $linkhash=sha1($link);
 
 						//Fixing and Prority Check
-						if (!isset($newlinksfound[$linkkey])){
+						if (!isset($newlinksfound[$linkhash])){
 							if ($urlcon >= 20){ $priority=$priority-1; }
 							if ($urlcon >= 50){ $priority=$priority-2; }
 							if ($urlcon >= 80){ $priority=$priority-2; }
@@ -162,10 +163,10 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 							//Add New URL to DB
 							if ($priority>0){
-								$newlinksfound[$linkkey]=true;
-								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE content='$link' LIMIT 1","index");
+								$newlinksfound[$linkhash]=true;
+								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE linkhash='$linkhash' LIMIT 1","index");
 								if (!sqdb_num_rows($queryt,"index") > 0){
-									$result = sqdb_query("INSERT INTO crawl_check(content) VALUES('$link')","index");
+									$result = sqdb_query("INSERT INTO crawl_check(linkhash,content) VALUES('$linkhash','$link')","index");
                   log_write("URL is good we are adding to the index list ".$link."","links");
 								}else{
                   log_write("URL is BAD we are not adding to the index list ".$link."","links");
