@@ -77,9 +77,9 @@ if (sqdb_num_rows($querye) > 0){
 			$temp_title_len=strlen($temp_title);
 			$temp_description_len=strlen($temp_description);
 
-			if ($temp_title!=""){ $webpage_score+=20; //sitelog("score","+20 has title"); }
-			if ($temp_description!=""){ $webpage_score+=30; //sitelog("score","+30 has description"); }
-			if ($temp_title_len<5){ if ($temp_title!=""){ $webpage_score-=20; //sitelog("score","-20 title is under 5 characters"); }}
+			if ($temp_title!=""){ $webpage_score+=20; }
+			if ($temp_description!=""){ $webpage_score+=30;  }
+			if ($temp_title_len<5){ if ($temp_title!=""){ $webpage_score-=20; }}
 			if ($temp_description_len<6){ if ($temp_description!=""){ $webpage_score-=30; }}
 			if (strpos($webpage_meta["description"], "!DOCTYPE html") !== false){ $webpage_score-=2; }
 			if (strpos($webpage_meta["robots"], "noindex") !== false){ $webpage_score-=900; }
