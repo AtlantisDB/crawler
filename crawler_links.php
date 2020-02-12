@@ -34,7 +34,7 @@ if (sqdb_num_rows($querye) > 0){
     $webpage_header=curl_getinfo($ch);
     curl_close($ch);
 
-		//sitelog("startup","Starting process on url ".$scanurl."");
+    log_write("Starting process on url ".$scanurl."","links");
 
     $webpage_size_bytes=strlen($webpage_html);
     $webpage_url=$webpage_header["url"];
@@ -60,10 +60,11 @@ if (sqdb_num_rows($querye) > 0){
 		$webpage_url_hash=hashgenerate($webpage_url);
 		$webpage_adult=check_adult($webpage_html);
 
-		//sitelog("good","Starting scan on webpage with the URL ".$webpage_url." with byte size of ".$webpage_size_bytes." and key ".$webpage_key." hash ".$webpage_url_hash."");
+    log_write("Starting scan on webpage with the URL ".$webpage_url." with byte size of ".$webpage_size_bytes." and key ".$webpage_key." hash ".$webpage_url_hash."","links");
 
 		//Check if we can keep running
 		if ($webpage_score>=1){
+      log_write("Passed basic checks, starting advanced scanning","links");
 			//sitelog("good","Passed basic checks, starting advanced scanning");
 			//sitelog("info","Adult content check gave us ".$webpage_adult."");
 
@@ -97,8 +98,9 @@ if (sqdb_num_rows($querye) > 0){
 			if ($temp_description_len <= 40){ $webpage_score-=15; }
 			if ($temp_description_len <= 30){ $webpage_score-=15; }
 
-			$webpage_linkinscore=round((check_webpage_links_weight($webpage_url))/40);
+			//$webpage_linkinscore=round((check_webpage_links_weight($webpage_url))/40);
 			////sitelog("score","After all main checks the score is now ".$webpage_score." with ".$webpage_linkinscore." external links for the site");
+      log_write("After all main checks the score is now ".$webpage_score."","links");
 			$webpage_score=$webpage_score+$webpage_linkinscore;
 
       //Common phrases in the page for simple index search
@@ -115,6 +117,7 @@ if (sqdb_num_rows($querye) > 0){
 				//Saving NEW
 				if ($webpage_db_new==true){
           $querye=sqdb_query("INSERT INTO crawl_save(content) VALUES('$webpage_url')","index");
+          log_write("Added webpage to save list","links");
 				}
 				//Saving UPDATE
 				if ($webpage_db_new==false){
@@ -157,19 +160,19 @@ if (sqdb_num_rows($querye) > 0){
 								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE url='$link' LIMIT 1");
 								if (!sqdb_num_rows($queryt) > 0){
 									$result = sqdb_query("INSERT INTO crawl_check(url) VALUES('$link')");
-									//sitelog("good","Found new url to index ".$link."");
+                  log_write("Found new url to index ".$link."","links");
 								}else{
-									//sitelog("warn","We already have url in system to scan ".$link."");
+                  log_write("We already have url in system to scan ".$link."","links");
 								}
 							}
 						}
 					}
 				}
 			}else{
-				//sitelog("fail","On more indepth scan the webpage failed more advanced scans with a score under 0");
+        log_write("On more indepth scan the webpage failed more advanced scans with a score under 0","links");
 			}
 		}else{
-			//sitelog("fail","Failed basic checks and cant start main scan");
+      log_write("Failed basic checks and cant start main scan","links");
 		}
   }
 }
