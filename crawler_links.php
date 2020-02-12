@@ -52,7 +52,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 		//Check if the url is one we can index
 		if (check_noindex($webpage_url)==true){ $webpage_score=0; }
 		if ($webpage_size_bytes<=500){ $webpage_score=0; }
-		if ($webpage_db_new==true){ if (check_webpage_indexed($webpage_url)==true){ $webpage_score=0; } }
+		//if ($webpage_db_new==true){ if (check_webpage_indexed($webpage_url)==true){ $webpage_score=0; } }
 
 
 		//Generate basic info about the content
@@ -132,7 +132,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 				//Scan for new links to add to crawler
 				$newlinksfound=array();
-				if (preg_match_all('|["\']http\:\/\/([a-zA-Z0-9\-\_\?\&\#]\S*)["\']|i', $webpage_html, $links, PREG_SET_ORDER)){
+				if (preg_match_all('/href=["\']https\:\/\/([a-zA-Z0-9\-\_\?\&\#]\S*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
 					foreach ($links as $value){
 						$priority=10;
 						$link=$value[1];
