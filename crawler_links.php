@@ -9,13 +9,15 @@ log_write("Startup Test @ ".make_timestamp()."!","links");
 
 log_write("Loading links to check...","links");
 
-$querye=sqdb_query("SELECT * FROM crawl_check LIMIT 5","index");
+$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 5","index");
 if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
     $scanurl = $row['content'];
     $qdelete=sqdb_query("DELETE FROM crawl_check WHERE id='$id'","index");
 		if (strpos($scanurl, "http") === false){ $scanurl="http://".$scanurl.""; }
+    if (strpos($scanurl, "?") !== false){ $scanurl=substr($scanurl, 0, strpos($scanurl, "?")); }
+    
 		$webpage_score=5;
 		$webpage_https=false;
 		$webpage_db_new=true;
@@ -46,7 +48,8 @@ if (sqdb_num_rows($querye,"index") > 0){
     $webpage_url=str_replace("http://www.","http://",$webpage_url);
 		//check if site site is using https
 		if (strpos($webpage_url, "https://") !== false){ $webpage_https=true; }
-		//Clean up the URL for saving
+
+    //Clean up the URL for saving
 		$webpage_url=str_replace("https://","",$webpage_url);
 		$webpage_url=str_replace("http://","",$webpage_url);
 		$webpage_url=trim($webpage_url,'/');
