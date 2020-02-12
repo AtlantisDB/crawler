@@ -317,6 +317,7 @@ function check_noindex($url){
   if (strpos($url, "facebook.com/photo.php") !== false){ $returns=true; }
   if (strpos($url, "m.facebook.com") !== false){ $returns=true; }
   if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/posts/") !== false){ $returns=true; }}
+	if (strpos($url, "facebook.com") !== false){ if (strpos($url, "\/places/") !== false){ $returns=true; }}
   if (strpos($url, "reddit.com") !== false){ if (strpos($url, "\/comments/") !== false){ $returns=true; }}
 
   return $returns;
