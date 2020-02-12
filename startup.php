@@ -2,17 +2,6 @@
 
 //Import settings and begin connect to mysql tables for the system
 
-register_shutdown_function('handleFatalPhpError');
-
-function handleFatalPhpError() {
-   $last_error = error_get_last();
-   if($last_error['type'] === E_ERROR) {
-     $error=json_encode($last_error,true);
-      error_log("\n$error", 3, "/var/master/output_error.txt");
-   }
-}
-
-
 $sqdbsettings=array();
 
 $import = file_get_contents("/var/master/mysql.json");
