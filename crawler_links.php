@@ -9,7 +9,7 @@ log_write("Startup Test @ ".make_timestamp()."!","links");
 
 log_write("Loading links to check...","links");
 
-$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 3","index");
+$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY linkhash ASC LIMIT 3","index");
 if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
