@@ -128,7 +128,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 				//Scan for new links to add to crawler
 				$newlinksfound=array();
-				if (preg_match_all('/href=["\']([a-zA-Z0-9\-\_\?\&\#]\S*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
+				if (preg_match_all('/href=["\']([^'"]*)["\']/mi', $webpage_html, $links, PREG_SET_ORDER)){
 					foreach ($links as $value){
 						$priority=10;
 						$link=$value[1];
@@ -143,6 +143,12 @@ if (sqdb_num_rows($querye,"index") > 0){
             if (substr($link, 0, 1) === '/'){ $host=strtok($webpage_url, '/'); $link="".$host."".$link.""; }
 						$link=trim($link,'/');
 						$link=strtolower($link);
+            if (strpos($link, '.jpg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.png') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.svg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.jpeg') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.js') !== false){ $priority=$priority-999; }
+            if (strpos($link, '.css') !== false){ $priority=$priority-999; }
 						if (check_noindex($link)==true){ $priority=$priority-999; }
 						if (check_webpage_indexed($link)==true){ $priority=$priority-999; }
 						if (check_valid_domain($link)==true){ $priority=$priority-999; }
