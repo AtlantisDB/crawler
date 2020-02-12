@@ -9,7 +9,7 @@ log_write("Startup Test @ ".make_timestamp()."!","links");
 
 log_write("Loading links to check...","links");
 
-$querye=sqdb_query("SELECT * FROM crawl_check ORDER BY id ASC LIMIT 1","index");
+$querye=sqdb_query("SELECT * FROM crawl_check LIMIT 5","index");
 if (sqdb_num_rows($querye,"index") > 0){
   while ($row=sqdb_fetch_array($querye,"index")){
     $id = $row['id'];
@@ -20,6 +20,9 @@ if (sqdb_num_rows($querye,"index") > 0){
 		$webpage_https=false;
 		$webpage_db_new=true;
 
+    log_write("","links");
+    log_write("","links");
+    log_write("-----------------------------------------------------------------","links");
     log_write("Starting process on url ".$scanurl."","links");
 
     $ch = curl_init($scanurl);
