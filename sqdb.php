@@ -27,7 +27,7 @@ function sqdb_connect_table($table){
 	if (!isset($connections["".$table.""])){
 		$connections["".$table.""] = new mysqli($sqdb["".$table.""]["db_server"], $sqdb["".$table.""]["db_username"], $sqdb["".$table.""]["db_password"], $sqdb["".$table.""]["db_database"]);
 		if ($connections["".$table.""]->connect_error) {
-			log_write("We are unable to conect to our backend systems. Try again in a few minutes, we may be under heavy load.","error");
+			log_write("We are unable to conect to our backend systems. Try again in a few minutes, we may be under heavy load: ".$sqdb["".$table.""]["db_server"].", ".$sqdb["".$table.""]["db_username"].", ".$sqdb["".$table.""]["db_password"].", ".$sqdb["".$table.""]["db_database"]."","error");
 		}
 	}
 }
