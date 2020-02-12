@@ -138,6 +138,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 						$link=$value[1];
 						$link=makesafe($link);
 						$urlcon=strlen($link);
+            log_write("Found new url to index ".$link."","links");
 						if ($webpage_url==$link){ $priority=$priority-999; }
 						$link=str_replace("https://www.","https://",$link);
 			    	$link=str_replace("http://www.","http://",$link);
@@ -165,9 +166,9 @@ if (sqdb_num_rows($querye,"index") > 0){
 								$queryt=sqdb_query("SELECT * FROM crawl_check WHERE content='$link' LIMIT 1","index");
 								if (!sqdb_num_rows($queryt,"index") > 0){
 									$result = sqdb_query("INSERT INTO crawl_check(content) VALUES('$link')","index");
-                  log_write("Found new url to index ".$link."","links");
+                  log_write("URL is good we are adding to the index list ".$link."","links");
 								}else{
-                  log_write("We already have url in system to scan ".$link."","links");
+                  log_write("URL is BAD we are not adding to the index list ".$link."","links");
 								}
 							}
 						}
