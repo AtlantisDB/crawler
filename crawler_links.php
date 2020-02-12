@@ -122,7 +122,7 @@ if (sqdb_num_rows($querye,"index") > 0){
 
 				//Saving NEW
 				if ($webpage_db_new==true){
-          $linkhash=sha1($link);
+          $linkhash=sha1($webpage_url);
           $querye=sqdb_query("INSERT INTO crawl_save(linkhash,content) VALUES('$linkhash','$webpage_url')","index");
           log_write("Added webpage to save list","links");
 				}
@@ -177,9 +177,13 @@ if (sqdb_num_rows($querye,"index") > 0){
 				}
 			}else{
         log_write("On more indepth scan the webpage failed more advanced scans with a score under 0","links");
+        $linkhash=sha1($webpage_url);
+        $querye=sqdb_query("INSERT INTO crawl_junk(linkhash,content) VALUES('$linkhash','$webpage_url')","index");
 			}
 		}else{
       log_write("Failed basic checks and cant start main scan","links");
+      $linkhash=sha1($webpage_url);
+      $querye=sqdb_query("INSERT INTO crawl_junk(linkhash,content) VALUES('$linkhash','$webpage_url')","index");
 		}
   }
 }else{
